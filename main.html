@@ -13,7 +13,7 @@
     }
 
     body {
-      background-image: url('img/background.jpg');
+      background-image: url('img/meadow.jpeg');
       background-size: cover;
     }
 
@@ -156,19 +156,60 @@
     const bookmarksList = document.querySelector('.bookmarks-list');
     const bookmarkForm = document.querySelector('.bookmark-form');
     const bookmarkInput = bookmarkForm.querySelector('input[type=text]');
+    const bookmarks = JSON.parse(localStorage.getItem('bookmarks')) || [];
+
+    fillBookmarksList(bookmarks);
 
     function createBookmark(e) {
       e.preventDefault();
 
+      // add a new bookmark to the bookmarks
       const title = bookmarkInput.value;
-      const bookmark = document.createElement('a');
-      bookmark.className = 'bookmark';
-      bookmark.innerText = title;
-      bookmark.href = '#';
-      bookmark.target = '_blank';
-      bookmarksList.appendChild(bookmark);
+      const bookmark = {
+        title: title
+      };
 
+      bookmarks.push(bookmark);
+      fillBookmarksList(bookmarks);
+      storeBookmarks(bookmarks);
       bookmarkForm.reset();
+
+      console.table(bookmarks);
+      // save that bookmarks list to localStorage
+      // const title        = bookmarkInput.value;      
+      // const bookmark     = document.createElement('a');
+      // bookmark.className = 'bookmark';
+      // bookmark.innerText = title;
+      // bookmark.href      = '#';
+      // bookmark.target    = '_blank';
+      // bookmarksList.appendChild(bookmark);      
+    }
+
+    function fillBookmarksList(bookmarks = []) {
+      const bookmarksHtml = bookmarks.map((bookmark) => {
+        return `
+          <a href="#" class="bookmark">
+            ${bookmark.title}
+          </a>
+        `;
+      }).join('');
+
+      bookmarksList.innerHTML = bookmarksHtml;
+
+      // let bookmarksHtml = '';
+      // for (let i = 0; i < bookmarks.length; i++) {
+      //   bookmarksHtml += `
+      //     <a href="#" class="bookmark">
+      //       ${bookmarks[i].title}
+      //     </a>
+      //   `;
+      // }
+      // console.log(bookmarksHtml);  
+
+    }
+
+    function storeBookmarks(bookmarks = []) {
+      localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
     }
 
     bookmarkForm.addEventListener('submit', createBookmark);
