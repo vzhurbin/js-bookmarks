@@ -1,0 +1,17 @@
+{
+  "name": "js-starter-bookmarker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.html",
+  "dependencies": {
+  },
+  "devDependencies": {
+  "browser-sync": "^2.23.6"
+},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "browser-sync start --server --files '**/*.html, !node_modules/**/*' --directory --port 8080"
+  },
+  "author": "",
+  "license": "ISC"
+}
