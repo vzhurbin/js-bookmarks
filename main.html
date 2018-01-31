@@ -157,7 +157,7 @@
       }
     }
 
-    input.addEventListener('focusin', showFloater);
+    input.addEventListener('focus', showFloater);
     // input.addEventListener('focusout', closeFloater);
     overlay.addEventListener('click', closeFloater);
 
@@ -205,16 +205,6 @@
         .catch(error => {
           alert('There was a problem getting info!'); 
         });
-
-      // console.table(bookmarks);
-      // save that bookmarks list to localStorage
-      // const title        = bookmarkInput.value;      
-      // const bookmark     = document.createElement('a');
-      // bookmark.className = 'bookmark';
-      // bookmark.innerText = title;
-      // bookmark.href      = '#';
-      // bookmark.target    = '_blank';
-      // bookmarksList.appendChild(bookmark);      
     }
 
     function fillBookmarksList(bookmarks = []) {
@@ -223,6 +213,8 @@
           <div class="bookmark" data-id="${i}">
             <a href="${bookmark.link}">
               <div class="img" style="background-image:url('${bookmark.image}')"></div>
+            </a>
+            <a href="${bookmark.link}">
               <div class="title">${bookmark.title}</div>
             </a>
             <span class="glyphicon glyphicon-remove"></span>
@@ -231,16 +223,6 @@
       }).join('');     
 
       bookmarksList.innerHTML = bookmarksHtml;    
-
-      // let bookmarksHtml = '';
-      // for (let i = 0; i < bookmarks.length; i++) {
-      //   bookmarksHtml += `
-      //     <a href="#" class="bookmark">
-      //       ${bookmarks[i].title}
-      //     </a>
-      //   `;
-      // }
-      // console.log(bookmarksHtml);        
     }
 
     function removeBookmark(e) {
