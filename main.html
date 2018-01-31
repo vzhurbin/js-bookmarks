@@ -167,16 +167,14 @@
     const bookmarkForm  = document.querySelector('.bookmark-form');
     const bookmarkInput = bookmarkForm.querySelector('input[type=text]');
     const bookmarks     = JSON.parse(localStorage.getItem('bookmarks')) || [];
-    const apiUrl        = 'https://opengraph.io/api/1.0/site';
-    const appId         = '58858c7bcf07b61e64257391'; 
+    const apiUrl        = 'https://opengraph.io/api/1.1/site';
+    const appId         = '5a7191d03e22ba981a395bf4'; 
 
     fillBookmarksList(bookmarks);
 
     function createBookmark(e) {
       e.preventDefault();
-
       if (!bookmarkInput.value) {
-        alert('We need info!');   
         return;
       }
 
@@ -184,18 +182,14 @@
 
       // add a new bookmark to the bookmarks
       fetch(`${apiUrl}/${url}?app_id=${appId}`)
-      // fetch(apiUrl + '/' + url + '?app_id=' + appId)
         .then(response => response.json())
         .then(data => { 
-          console.log(data);
-
+          
           const bookmark = {
             title: data.hybridGraph.title,
             image: data.hybridGraph.image,
-            link: data.hybridGraph.url
+            link: data.hybridGraph.url,
           };
-
-          console.log(bookmark);
 
           bookmarks.push(bookmark);
           fillBookmarksList(bookmarks);
@@ -203,7 +197,21 @@
           bookmarkForm.reset();
         })
         .catch(error => {
-          alert('There was a problem getting info!'); 
+
+          if(bookmarkInput.value) {
+
+            const bookmark = {
+              title: bookmarkInput.value,
+            };
+
+            bookmarks.push(bookmark);
+            fillBookmarksList(bookmarks);
+            storeBookmarks(bookmarks);
+            bookmarkForm.reset();
+            
+          } else {
+            alert('Could not fetch data :(')
+          }
         });
     }
 
