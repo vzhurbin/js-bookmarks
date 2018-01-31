@@ -1,4 +1,5 @@
 const body = document.body;
+
 const input = document.querySelector('input[type=text]');
 const overlay = document.querySelector('.overlay');
 
@@ -13,7 +14,19 @@ function closeFloater() {
 }
 
 input.addEventListener('focus', showFloater);
-// input.addEventListener('focusout', closeFloater);
+input.addEventListener('click', showFloater);
+input.addEventListener('focusout', closeFloater);
+input.addEventListener('keydown', function (e) {
+  // console.log(e);
+  // console.log(e.key);
+  console.log(e.key === "Escape");
+  if (e.key === "Escape" || e.key === "Enter") {
+    closeFloater();
+  }
+
+  return;
+});
+
 overlay.addEventListener('click', closeFloater);
 
 // =========================
@@ -28,6 +41,7 @@ const appId = '5a7191d03e22ba981a395bf4';
 fillBookmarksList(bookmarks);
 
 function createBookmark(e) {
+  console.log(e.type);
   e.preventDefault();
   if (!bookmarkInput.value) {
     return;
@@ -89,6 +103,7 @@ function fillBookmarksList(bookmarks = []) {
 }
 
 function removeBookmark(e) {
+  console.log(e.type);
   if (!e.target.matches('.glyphicon-remove')) return;
 
   // find the index
