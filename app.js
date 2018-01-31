@@ -16,10 +16,7 @@ function closeFloater() {
 input.addEventListener('focus', showFloater);
 input.addEventListener('click', showFloater);
 input.addEventListener('focusout', closeFloater);
-input.addEventListener('keydown', function (e) {
-  // console.log(e);
-  // console.log(e.key);
-  console.log(e.key === "Escape");
+input.addEventListener('keydown', e => {
   if (e.key === "Escape" || e.key === "Enter") {
     closeFloater();
   }
