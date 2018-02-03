@@ -34,13 +34,15 @@ const bookmarksList = document.querySelector('.bookmarks-list');
 const bookmarkForm = document.querySelector('.bookmark-form');
 const bookmarkInput = bookmarkForm.querySelector('input[type=text]');
 const bookmarks = JSON.parse(localStorage.getItem('bookmarks')) || [];
+
+// service to fetch url data
 const apiUrl = 'https://opengraph.io/api/1.1/site';
 const appId = '5a7191d03e22ba981a395bf4';
 
 fillBookmarksList(bookmarks);
 
 function createBookmark(e) {
-  console.log(e.type);
+  // console.log(e.type);
   e.preventDefault();
   if (!bookmarkInput.value) {
     return;
@@ -70,6 +72,8 @@ function createBookmark(e) {
 
         const bookmark = {
           title: bookmarkInput.value,
+          image: '',
+          link: '',
         };
 
         bookmarks.push(bookmark);
