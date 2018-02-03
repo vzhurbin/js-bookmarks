@@ -1,10 +1,13 @@
 const body = document.body;
 
 const input = document.querySelector('input[type=text]');
+const button = document.querySelector('.floater-bottom button');
 const overlay = document.querySelector('.overlay');
 
 function showFloater() {
-  body.classList.add('show-floater');
+  if (!body.classList.contains('show-floater')) {
+    body.classList.add('show-floater');
+  }
 }
 
 function closeFloater() {
@@ -13,16 +16,16 @@ function closeFloater() {
   }
 }
 
-input.addEventListener('focus', showFloater);
-input.addEventListener('click', showFloater);
-input.addEventListener('keydown', e => {
-  if (e.key === "Escape" || e.key === "Enter") {
+const closeFloaterKeys = (event) => {
+  if (event.key === "Escape" || event.key === "Enter") {
     closeFloater();
   }
+}
 
-  return;
-});
-
+input.addEventListener('focus', showFloater);
+input.addEventListener('click', showFloater);
+input.addEventListener('keydown', closeFloaterKeys);
+button.addEventListener('keydown', closeFloaterKeys);
 overlay.addEventListener('click', closeFloater);
 
 // =========================
