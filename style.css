@@ -80,7 +80,7 @@ body.show-floater .overlay {
     background: #FFF;
     position: relative;
     color: #999;
-    padding: 20px;
+    padding: 25px;
     transition: 0.3s ease all;
     border-bottom: 1px solid #DDD;
     font-size: 16px;
@@ -106,10 +106,10 @@ body.show-floater .overlay {
     background-color: #DDD;
     border-radius: 3px;
     background-size: contain;
-    background-position: center;
+    background-position: left center;
     background-repeat: no-repeat;
     background-color:transparent;
-    width: 100px;
+    width: 60px;
     height: 60px;
     margin-right: 20px;
 }
