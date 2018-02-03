@@ -1,9 +1,5 @@
-body,
-.jumbotron {
-    padding: 30px;
-}
-
 body {
+    padding: 30px;
     background-image: url('img/background.jpg');
     background-size: cover;
 }
@@ -29,6 +25,7 @@ body {
     border: none;
     box-shadow: none;
     font-size: 14px;
+    height: 100%;
     transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.4) all;
 }
 
@@ -108,9 +105,11 @@ body.show-floater .overlay {
 .bookmark .img {
     background-color: #DDD;
     border-radius: 3px;
-    background-size: cover;
-    background-position: top center;
-    width: 120px;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color:transparent;
+    width: 100px;
     height: 60px;
     margin-right: 20px;
 }

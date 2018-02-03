@@ -4,21 +4,26 @@ const input = document.querySelector('input[type=text]');
 const button = document.querySelector('.floater-bottom button');
 const overlay = document.querySelector('.overlay');
 
-function showFloater() {
+const showFloater = () => {
   if (!body.classList.contains('show-floater')) {
     body.classList.add('show-floater');
   }
 }
 
-function closeFloater() {
+const closeFloater = () => {
   if (body.classList.contains('show-floater')) {
     body.classList.remove('show-floater');
   }
 }
 
 const closeFloaterKeys = (event) => {
-  if (event.key === "Escape" || event.key === "Enter") {
-    closeFloater();
+  switch (event.key) {
+    case 'Enter':
+    case 'Escape':
+      closeFloater();
+      break;
+    default:
+      break;
   }
 }
 
@@ -28,7 +33,6 @@ input.addEventListener('keydown', closeFloaterKeys);
 button.addEventListener('keydown', closeFloaterKeys);
 overlay.addEventListener('click', closeFloater);
 
-// =========================
 
 const bookmarksList = document.querySelector('.bookmarks-list');
 const bookmarkForm = document.querySelector('.bookmark-form');
@@ -39,57 +43,59 @@ const bookmarks = JSON.parse(localStorage.getItem('bookmarks')) || [];
 const apiUrl = 'https://opengraph.io/api/1.1/site';
 const appId = '5a7191d03e22ba981a395bf4';
 
-fillBookmarksList(bookmarks);
+const isUrl = (str) => {
+  const pattern = /^(http|https)?:\/\//;
+  return pattern.test(str)
+};
 
 function createBookmark(e) {
   // console.log(e.type);
   e.preventDefault();
-  if (!bookmarkInput.value) {
+
+  const userInput = bookmarkInput.value;
+  console.log(userInput);
+
+  if (!userInput) {
     return;
   }
 
-  const url = encodeURIComponent(bookmarkInput.value);
+  console.log(isUrl(userInput));
 
-  // add a new bookmark to the bookmarks
-  fetch(`${apiUrl}/${url}?app_id=${appId}`)
-    .then(response => response.json())
-    .then(data => {
-
-      const bookmark = {
-        title: data.hybridGraph.title,
-        image: data.hybridGraph.image,
-        link: data.hybridGraph.url,
-      };
-
-      bookmarks.push(bookmark);
-      fillBookmarksList(bookmarks);
-      storeBookmarks(bookmarks);
-      bookmarkForm.reset();
-    })
-    .catch(error => {
-
-      if (bookmarkInput.value) {
-
+  if (!isUrl(userInput)) {
+    const bookmark = { title: userInput }
+    updateBookmarkList (bookmarkForm, bookmarks, bookmark);
+  } else {
+    const url = encodeURIComponent(userInput);
+    fetch(`${apiUrl}/${url}?app_id=${appId}`)
+      .then(response => response.json())
+      .then(data => {
         const bookmark = {
-          title: bookmarkInput.value,
-          image: '',
-          link: '',
-        };
+          title: data.hybridGraph.title,
+          image: data.hybridGraph.image,
+          favicon: data.hybridGraph.favicon,
+          link: data.hybridGraph.url,
+        }
+        updateBookmarkList (bookmarkForm, bookmarks, bookmark);
+      })
+      .catch(error => {
+        console.log(error);
+        console.log(userInput);
+        alert('There was an error :(');
+      });
+  }
+};
 
-        bookmarks.push(bookmark);
-        fillBookmarksList(bookmarks);
-        storeBookmarks(bookmarks);
-        bookmarkForm.reset();
-
-      } else {
-        alert('Could not fetch data :(')
-      }
-    });
+const updateBookmarkList = (bookmarkForm, bookmarks, bookmark) => {
+  bookmarks.push(bookmark);
+  fillBookmarksList(bookmarks);
+    storeBookmarks(bookmarks);
+    bookmarkForm.reset();
 }
 
-function fillBookmarksList(bookmarks = []) {
+const fillBookmarksList = (bookmarks = []) => {
   const bookmarksHtml = bookmarks.map((bookmark, i) => {
-    return `
+    if (bookmark.link && bookmark.image) {
+      return `
           <div class="bookmark" data-id="${i}">
             <a href="${bookmark.link}">
               <div class="img" style="background-image:url('${bookmark.image}')"></div>
@@ -100,13 +106,45 @@ function fillBookmarksList(bookmarks = []) {
             <span class="glyphicon glyphicon-remove"></span>
           </div>
         `;
+    }
+    if (bookmark.link && bookmark.favicon) {
+      return `
+          <div class="bookmark" data-id="${i}">
+            <a href="${bookmark.link}">
+              <div class="img" style="background-image:url('${bookmark.favicon}')"></div>
+            </a>
+            <a href="${bookmark.link}">
+              <div class="title">${bookmark.title}</div>
+            </a>
+            <span class="glyphicon glyphicon-remove"></span>
+           </div>
+        `;
+    }
+    if (bookmark.link) {
+      return `
+          <div class="bookmark" data-id="${i}">
+            <a href="${bookmark.link}">
+              <div class="title">${bookmark.title}</div>
+            </a>
+            <span class="glyphicon glyphicon-remove"></span>
+          </div>
+        `;
+    } else {
+      return `
+          <div class="bookmark" data-id="${i}">
+            <div class="title">${bookmark.title}</div>
+            <span class="glyphicon glyphicon-remove"></span>
+          </div>
+          `;
+    }
   }).join('');
 
   bookmarksList.innerHTML = bookmarksHtml;
-}
+};
 
-function removeBookmark(e) {
-  console.log(e.type);
+fillBookmarksList(bookmarks);
+
+const removeBookmark = (e) => {
   if (!e.target.matches('.glyphicon-remove')) return;
 
   // find the index
@@ -119,7 +157,7 @@ function removeBookmark(e) {
   storeBookmarks(bookmarks);
 }
 
-function storeBookmarks(bookmarks = []) {
+const storeBookmarks = (bookmarks = []) => {
   localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
 }
 
