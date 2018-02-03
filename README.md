@@ -1,3 +1,5 @@
+[Demo](https://vzhurbin.github.io/js-bookmarks/)
+
 A simple app to create bookmark cards:
 - add/remove cards with text or url
 - fetch url info and display image/link
